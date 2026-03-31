@@ -47,6 +47,22 @@ def test_invalid_post():
     # Handle both cases safely
     assert data == {} or isinstance(data, dict)
 
+def test_create_post():
+    payload = {
+        "title": "test",
+        "body": "test body",
+        "userId": 1
+    }
+
+    response = client.post("/posts", payload)
+
+    assert response.status_code == 201
+
+    data = response.json()
+    assert data["title"] == payload["title"]
+
+
+
 # Data Driven Testing
 
 import pytest, json

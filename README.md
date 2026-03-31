@@ -1,3 +1,6 @@
+## CI Status
+![Tests](https://github.com/HoJungjae/api-test-automation-framework/actions/workflows/tests.yml/badge.svg)
+
 # API Test Automation Framework
 
 ## Overview
