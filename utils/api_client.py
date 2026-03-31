@@ -19,7 +19,7 @@ class APIClient:
         if not expect_failure:
             response.raise_for_status()
         
-    return response
+        return response
 
     def post(self, endpoint, payload, expect_failure=False):
         url = f"{self.base_url}{endpoint}"
