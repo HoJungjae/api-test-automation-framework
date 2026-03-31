@@ -1,4 +1,5 @@
 from utils.api_client import APIClient
+from utils.validators import validate_keys
 
 BASE_URL = "https://jsonplaceholder.typicode.com"
 
@@ -20,8 +21,8 @@ def test_get_posts():
     # assert "title" in data[0]
     # assert "body" in data[0]
     # assert "userId" in data[0]
-    assert all(key in data[0] for key in ["title", "body", "userId"])
-
+    # assert all(key in data[0] for key in ["title", "body", "userId"])
+    validate_keys(data[0], ["title", "body", "userId"])
 
 def test_get_single_post():
     response = client.get("/posts/1")
