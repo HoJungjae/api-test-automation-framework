@@ -33,11 +33,12 @@ def test_get_single_post():
 
     # Validate exact data
     assert data["id"] == 1
-    assert "title" in data
+    assert isinstance(data["title"], str)
+    assert isinstance(data["userId"], int)
 
 
 def test_invalid_post():
-    response = client.get("/posts/99999")
+    response = client.get("/posts/99999", expect_failure=True)
 
     # This API sometimes returns empty object instead of 404
     assert response.status_code in [200, 404]
