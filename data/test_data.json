@@ -1,0 +1,5 @@
+[
+  { "post_id": 1, "expected_user": 1 },
+  { "post_id": 2, "expected_user": 1 },
+  { "post_id": 3, "expected_user": 1 }
+]
