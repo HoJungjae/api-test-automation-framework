@@ -1,61 +1,54 @@
+import pytest
+import json
 from utils.api_client import APIClient
 from utils.validators import validate_keys
 
-BASE_URL = "https://jsonplaceholder.typicode.com"
 
-client = APIClient(BASE_URL)
+# All tests use the session-scoped api_client fixture from conftest.py
 
 
-def test_get_posts():
-    response = client.get("/posts")
+@pytest.mark.live
+def test_get_posts(api_client):
+    response = api_client.get("/posts")
 
-    # Status code validation
     assert response.status_code == 200
 
     data = response.json()
-
-    # Validate response type
     assert isinstance(data, list)
-
-    # Validate structure
-    # assert "title" in data[0]
-    # assert "body" in data[0]
-    # assert "userId" in data[0]
-    # assert all(key in data[0] for key in ["title", "body", "userId"])
     validate_keys(data[0], ["title", "body", "userId"])
 
-def test_get_single_post():
-    response = client.get("/posts/1")
+
+@pytest.mark.live
+def test_get_single_post(api_client):
+    response = api_client.get("/posts/1")
 
     assert response.status_code == 200
 
     data = response.json()
-
-    # Validate exact data
     assert data["id"] == 1
     assert isinstance(data["title"], str)
     assert isinstance(data["userId"], int)
 
 
-def test_invalid_post():
-    response = client.get("/posts/99999", expect_failure=True)
+@pytest.mark.live
+def test_invalid_post(api_client):
+    response = api_client.get("/posts/99999", expect_failure=True)
 
-    # This API sometimes returns empty object instead of 404
     assert response.status_code in [200, 404]
 
     data = response.json()
-
-    # Handle both cases safely
     assert data == {} or isinstance(data, dict)
 
-def test_create_post():
+
+@pytest.mark.live
+def test_create_post(api_client):
     payload = {
         "title": "test",
         "body": "test body",
         "userId": 1
     }
 
-    response = client.post("/posts", payload)
+    response = api_client.post("/posts", payload)
 
     assert response.status_code == 201
 
@@ -63,23 +56,17 @@ def test_create_post():
     assert data["title"] == payload["title"]
 
 
-
-# Data Driven Testing
-
-import pytest, json
-
-
 def load_test_data():
     with open("data/test_data.json") as f:
         return json.load(f)
 
-# This is cool. Awesome concept. Super scalable.
+
+@pytest.mark.live
 @pytest.mark.parametrize("case", load_test_data())
-def test_post_user(case):
-    response = client.get(f"/posts/{case['post_id']}")
+def test_post_user(api_client, case):
+    response = api_client.get(f"/posts/{case['post_id']}")
 
     assert response.status_code == 200
 
     data = response.json()
-
     assert data["userId"] == case["expected_user"]

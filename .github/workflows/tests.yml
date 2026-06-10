@@ -1,6 +1,6 @@
 name: Run API Tests
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -13,10 +13,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: '3.12'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run tests
-        run: pytest -v
+      - name: Run mocked tests (no network required)
+        run: pytest -m "mocked" --junitxml=results.xml -v
+
+      - name: Run full suite
+        run: pytest -v --junitxml=results-full.xml
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: results.xml
