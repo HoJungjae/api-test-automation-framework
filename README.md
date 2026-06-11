@@ -30,10 +30,10 @@ The end result is a framework that demonstrates all the same capabilities as bef
 - Session-scoped pytest fixture via `conftest.py`
 - Data-driven testing using pytest parametrization
 - Mocked tests using `@patch` from `unittest.mock` and `pytest-mock`'s `mocker` fixture (no network required)
-- Explicit `FakeResponse` class as a test double — exposes only `status_code`, `json()`, and `raise_for_status()`, making unintended calls fail loudly instead of silently
+- Response stubbing via `MagicMock` chained `return_value` — sets `status_code`, `json.return_value`, and `raise_for_status.return_value` inline per test
 - `unittest.TestCase`-style tests alongside native pytest tests
 - Unit tests for utility functions
-- Pytest markers (`live`, `mocked`, `smoke`) for filtering test runs — note these are labels only; the actual mocking is done by `@patch`
+- Pytest markers (`live`, `mocked`, `smoke`) for filtering test runs — labels only; the actual mocking is done by `@patch`
 - Validation of REST endpoints (GET, POST, edge cases)
 - CI/CD pipeline via GitHub Actions with staged test runs and artifact upload
 
